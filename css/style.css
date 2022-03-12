@@ -1,0 +1,131 @@
+html {
+  font-size: 10px;
+  font-family: "Manrope", sans-serif;
+}
+
+body {
+  background-color: hsl(0, 0%, 5%);
+}
+
+.container {
+  --big-image-width: 172px;
+  --big-image-height: 308px;
+  --big-image-shadow: 4px;
+  --small-image-width: 110px;
+  --small-image-height: 192px;
+  --column-gap: 80px;
+  width: 764px;
+  height: 478px;
+  margin-inline: auto;
+  transform: translateY(calc(50vh - 50%));
+  border-inline-width: 42px;
+  border-block-width: 78px;
+  border-color: hsl(0, 0%, 65%);
+  border-style: solid;
+  background-color: hsl(0, 0%, 5%);
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.container-inner {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  scroll-behavior: smooth;
+  overflow-x: scroll;
+}
+
+.image-main {
+  width: calc(var(--big-image-width) - var(--big-image-shadow));
+  height: calc(var(--big-image-height) - var(--big-image-shadow));
+  border-radius: 88px 88px 88px 88px / 96px 96px 96px 96px;
+  position: absolute;
+  inset-inline: calc(50% - 86px);
+}
+
+.image-scroller {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  column-gap: var(--column-gap);
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(50% - (var(--big-image-width) / 2));
+  transition: ease 0.4s;
+}
+
+.image {
+  width: var(--small-image-width);
+  height: var(--small-image-height);
+  object-fit: cover;
+  aspect-ratio: auto;
+  opacity: 0.4;
+  border-radius: 88px 88px 88px 88px / 96px 96px 96px 96px;
+  animation: transform-inactive 0.4s linear forwards;
+}
+
+.image.active {
+  animation: transform-active 0.4s linear forwards;
+}
+
+.image-author {
+  width: 100px;
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 3.2rem;
+  color: hsl(0, 0%, 100%);
+  position: absolute;
+  inset-block-start: 45%;
+  inset-inline-start: 90px;
+}
+
+.btn-next {
+  width: 72px;
+  height: 36px;
+  outline: none;
+  appearance: none;
+  border: none;
+  color: hsl(0, 0%, 100%);
+  font-weight: 800;
+  border-radius: 24px;
+  background-color: hsl(350, 67%, 56%);
+  position: absolute;
+  inset-block-start: 48%;
+  inset-inline-end: 25%;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.fa-arrow-right {
+  margin-inline-start: 6px;
+}
+
+@keyframes transform-active {
+  from {
+    opacity: 0.4;
+    height: 192px;
+    width: 110px;
+  }
+  to {
+    opacity: 1;
+    height: 304px;
+    width: 168px;
+    box-shadow: 4px -4px 0 hsl(350, 67%, 56%);
+  }
+}
+
+@keyframes transform-inactive {
+  from {
+    opacity: 1;
+    height: 304px;
+    width: 168px;
+    box-shadow: 4px -4px 0 hsl(350, 67%, 56%);
+  }
+  to {
+    opacity: 0.4;
+    height: 192px;
+    width: 110px;
+  }
+}
