@@ -34,7 +34,6 @@ body {
   overflow: hidden;
   position: relative;
   scroll-behavior: smooth;
-  overflow-x: scroll;
 }
 
 .image-main {
