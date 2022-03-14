@@ -51,14 +51,12 @@ body {
   column-gap: var(--column-gap);
   position: absolute;
   inset-block: 0;
-  inset-inline-start: calc(50% - (var(--big-image-width) / 2));
   transition: ease 0.4s;
 }
 
 .image {
   width: var(--small-image-width);
   height: var(--small-image-height);
-  object-fit: cover;
   aspect-ratio: auto;
   opacity: 0.4;
   border-radius: 88px 88px 88px 88px / 96px 96px 96px 96px;

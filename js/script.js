@@ -1,6 +1,10 @@
 /**----------------------------------------------------------------**/
 
-let currentImage = -1;
+let cicleCounter1 = 1;
+let cicleCounter2 = 0;
+let totalImageCounter = 0;
+let currentImage = null;
+let imageToSendBack = null;
 const imagesArray = [];
 const btnNextEl = document.querySelector(".btn-next");
 const imageScrollerEl = document.querySelector(".image-scroller");
@@ -10,7 +14,7 @@ const COLUMN_GAP = 80;
 const IMAGE_WIDTH = 110;
 const MAIN_IMAGE_WIDTH = 172;
 const MAIN_IMAGE_SHADOW = 4;
-const BASE_URL = "https://picsum.photos/v2/list?page=4&limit=20";
+const BASE_URL = "https://picsum.photos/v2/list?page=1&limit=20";
 
 // Randomize Picsum URL page number
 
@@ -33,7 +37,7 @@ const normalizeImageURL = (url, width, height = width) => {
 
 const createImage = (imageFromJson, index) => {
   const newImageEl = document.createElement("img");
-  newImageEl.src = normalizeImageURL(imageFromJson.download_url, 400);
+  newImageEl.src = normalizeImageURL(imageFromJson.download_url, 172, 308);
   newImageEl.classList.add("image");
   newImageEl.dataset.author = imageFromJson.author;
   newImageEl.dataset.index = index;
@@ -42,24 +46,33 @@ const createImage = (imageFromJson, index) => {
 };
 
 const setImageActive = () => {
-  authorTextEl.textContent = imagesArray[currentImage].dataset.author;
-
+  let newInsetInline = null;
   const activeImageEl = imageScrollerEl.querySelector(".image.active");
+
   if (activeImageEl) {
     activeImageEl.classList.remove("active");
   }
+
   imagesArray[currentImage].classList.add("active");
+  authorTextEl.textContent = imagesArray[currentImage].dataset.author;
 
   let halfScreen = `50% - ${MAIN_IMAGE_WIDTH / 2}px`;
-  let newInsetInline = `${(IMAGE_WIDTH + COLUMN_GAP) * currentImage}px`;
-
+  
+  if (totalImageCounter < imagesArray.length) {
+    newInsetInline = `${(IMAGE_WIDTH + COLUMN_GAP) * totalImageCounter}px`;
+  } else {
+    newInsetInline = `${((IMAGE_WIDTH + COLUMN_GAP) * totalImageCounter) + ((IMAGE_WIDTH / 2 + MAIN_IMAGE_SHADOW) * cicleCounter2)}px`;
+  }
+  
+  totalImageCounter += 1;
   imageScrollerEl.style.insetInlineStart = `calc((${halfScreen}) - (${newInsetInline}))`;
 };
 
 /**----------------------------------------------------------------**/
 
 const fetchImages = (async () => {
-  const remoteImages = await fetch(BASE_URL);
+  console.log(randomizeURL(BASE_URL))
+  const remoteImages = await fetch(randomizeURL(BASE_URL));
   const imageList = await remoteImages.json();
 
   imageList.forEach((image, index) => {
@@ -69,6 +82,7 @@ const fetchImages = (async () => {
   });
 
   currentImage = 0;
+  imageToSendBack = currentImage - 4;
   setImageActive();
 
   /**----------------------------------------------------------------**/
@@ -87,9 +101,26 @@ const fetchImages = (async () => {
   btnNextEl.addEventListener("click", () => {
     if (currentImage === imagesArray.length - 1) {
       currentImage = -1;
+      cicleCounter2 += 1;
+    }
+    
+    if (imageToSendBack === imagesArray.length - 1) {
+      imageToSendBack = -1;
+      cicleCounter1 += 1;
     }
 
     currentImage += 1;
+    imageToSendBack += 1;
     setImageActive();
+
+    if (imageToSendBack >= 0) {
+      let newInset =
+        ((IMAGE_WIDTH + COLUMN_GAP) * imagesArray.length +
+          (IMAGE_WIDTH / 2 + MAIN_IMAGE_SHADOW)) *
+        cicleCounter1;
+      imagesArray[
+        imageToSendBack
+      ].style.transform = `translateX(${newInset}px)`;
+    }
   });
 })();
